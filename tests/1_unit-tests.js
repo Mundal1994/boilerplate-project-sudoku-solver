@@ -2,7 +2,8 @@ const chai = require('chai');
 const assert = chai.assert;
 
 const Solver = require('../controllers/sudoku-solver.js');
-let solver;
+const Puzzle = require('../controllers/puzzle-strings.js');
+let solver = new Solver;
 
 suite('Unit Tests', () => {
     test('valid puzzle string of 81 characters', function(){
@@ -15,10 +16,16 @@ suite('Unit Tests', () => {
         //assert.equal(, );
     });
     test('valid row placement', function(){
-        //assert.equal(, );
+        assert.isTrue(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[0][0], 1, 2, 3));
+        assert.isTrue(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[2][0], 1, 1, 2));
+        assert.isTrue(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[0][0], 9, 9, 8));
+        assert.isTrue(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[1][0], 8, 9, 2));
     });
     test('invalid row placement', function(){
-        //assert.equal(, );
+        assert.isFalse(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[0][0], 1, 2, 1));
+        assert.isFalse(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[2][0], 1, 1, 3));
+        assert.isFalse(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[0][0], 9, 9, 7));
+        assert.isFalse(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[1][0], 8, 9, 1));
     });
     test('valid column placement', function(){
         //assert.equal(, );

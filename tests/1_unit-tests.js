@@ -40,10 +40,16 @@ suite('Unit Tests', () => {
         assert.isFalse(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[1][0], 2, 2, 9));
     });
     test('valid region (3x3 grid) placement', function(){
-        //assert.equal(, );
+        assert.isTrue(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[0][0], 1, 2, 3));
+        assert.isTrue(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[2][0], 9, 8, 9));
+        assert.isTrue(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[0][0], 9, 6, 9));
+        assert.isTrue(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[1][0], 1, 2, 4));
     });
     test('invalid region (3x3 grid) placement', function(){
-        //assert.equal(, );
+        assert.isFalse(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[0][0], 1, 2, 5));
+        assert.isFalse(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[2][0], 9, 8, 2));
+        assert.isFalse(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[0][0], 9, 6, 2));
+        assert.isFalse(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[1][0], 1, 2, 3));
     });
     test('Valid puzzle strings pass the solver', function(){
         //assert.equal(, );

@@ -28,10 +28,16 @@ suite('Unit Tests', () => {
         assert.isFalse(solver.checkRowPlacement(Puzzle.puzzlesAndSolutions[1][0], 8, 9, 1));
     });
     test('valid column placement', function(){
-        //assert.equal(, );
+        assert.isTrue(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[0][0], 2, 1, 5));
+        assert.isTrue(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[2][0], 3, 9, 3));
+        assert.isTrue(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[0][0], 9, 9, 6));
+        assert.isTrue(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[1][0], 1, 2, 4));
     });
     test('invalid column placement', function(){
-        //assert.equal(, );
+        assert.isFalse(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[0][0], 1, 9, 4));
+        assert.isFalse(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[2][0], 8, 9, 1));
+        assert.isFalse(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[0][0], 2, 8, 8));
+        assert.isFalse(solver.checkColPlacement(Puzzle.puzzlesAndSolutions[1][0], 2, 2, 9));
     });
     test('valid region (3x3 grid) placement', function(){
         //assert.equal(, );

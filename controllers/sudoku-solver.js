@@ -10,30 +10,35 @@ class SudokuSolver {
     const valPos = start + column - 1;
 
     if (valPos < len && valPos >= 0) {
-      let numbers = '';
       while (start < end) {
-        if (start != valPos && puzzleString[start] != '.') {
-          numbers += puzzleString[start];
+        if (puzzleString[start] == value) {
+          return false;
         }
         ++start;
       }
 
-      if (!numbers.includes(value)) {
-        return true;
-      }
+      return true;
     }
     return false;
-    
-    /* to get position A1 
-      if we have row 4 and column 5
-      to find that in the string that is xlong 
-
-      9 * row(4) + column - 1 (array is zero indexed) == position in string.
-    */
   }
 
   checkColPlacement(puzzleString, row, column, value) {
+    const len = puzzleString.length;
+    let start = column - 1;
+    const end = len;
+    const valPos = (9 * (row - 1)) + start;
+  
+    if (valPos < len && valPos >= 0) {
+      while (start < end) {
+        if (puzzleString[start] == value) {
+          return false;
+        }
+        start += 9;
+      }
 
+      return true;
+    }
+    return false;
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {

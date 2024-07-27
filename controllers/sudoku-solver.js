@@ -101,6 +101,9 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
+    if (!this.validate(puzzleString)) {
+      return false;
+    }
     const len = puzzleString.length;
 
     let solved = true;

@@ -4,15 +4,13 @@ class SudokuSolver {
     const len = puzzleString.length;
 
     if (len != 81) {
-      console.log("Error: puzzle string is not 81 characters long, current len: ", len);
-      return false;
+      return 'Expected puzzle to be 81 characters long';
     }
     const validChar = '123456789.';
 
     for (let i = 0; i < len; i++) {
       if (!validChar.includes(puzzleString[i])) {
-        console.log("Error: puzzle string contains unvalid character: ", puzzleString[i]);
-        return false;
+        return 'Invalid characters in puzzle';
       }
       if (puzzleString[i] != '.') {
         const row = Math.floor((i / 9) + 1);
@@ -101,9 +99,11 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
-    if (!this.validate(puzzleString)) {
-      return false;
+    const isValid = this.validate(puzzleString);
+    if (isValid != true) {
+      return isValid;
     }
+
     const len = puzzleString.length;
 
     let solved = true;

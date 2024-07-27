@@ -93,7 +93,10 @@ suite('Functional Tests', () => {
             .keepOpen()
             .post('/api/solve')
             .send({
-                puzzle: puzzle.puzzlesAndSolutions[0][0]
+                puzzle: puzzle.puzzlesAndSolutions[0][0],
+                coordinate: 'A2',
+                value: 3
+                
             })
             .end(function(err, res){
                 assert.equal(res.status, 200);

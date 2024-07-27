@@ -33,7 +33,7 @@ suite('Functional Tests', () => {
                 assert.equal(res.status, 200);
                 assert.isObject(res.body);
                 assert.hasAllKeys(res.body, ['error']);
-                assert.equal(res.body.error, 'Error: missing Sudoku string.');
+                assert.equal(res.body.error, 'Required field missing');
                 done();
             });
         });
@@ -247,7 +247,7 @@ suite('Functional Tests', () => {
             .send({
                 puzzle: puzzle.puzzlesAndSolutions[4][0],
                 coordinate: 'E8',
-                value: 10
+                value: 'A'
             })
             .end(function(err, res){
                 assert.equal(res.status, 200);

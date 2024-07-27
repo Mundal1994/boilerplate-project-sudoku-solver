@@ -15,7 +15,8 @@ module.exports = function (app) {
       }
 
       // check if valid value
-      if (value < 1 || value > 9) {
+      const isNumber = Number(value);
+      if (!isNumber || isNumber < 1 || isNumber > 9) {
         return res.json({error: 'Invalid value'});
       }
 
@@ -74,7 +75,7 @@ module.exports = function (app) {
     .post((req, res) => {
       const sudoku = req.body.puzzle;
       if (!sudoku) {
-        return res.json({error: 'Error: missing Sudoku string.'});
+        return res.json({error: 'Required field missing'});
       }
 
       const result = solver.solve(sudoku);

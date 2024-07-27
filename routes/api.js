@@ -8,9 +8,9 @@ module.exports = function (app) {
 
   app.route('/api/check')
     .post((req, res) => {
-      const {puzzle, coordinate, value} = req.body;
-      console.log("puzzle: ", puzzle, "coordinate: ", coordinate, "value: ", value);
-      if (!puzzle || !validation || !value) {
+      let {puzzle, coordinate, value} = req.body;
+      
+      if (!puzzle || !coordinate || !value) {
         return res.json({error: 'Required field(s) missing'});
       }
 
@@ -20,20 +20,53 @@ module.exports = function (app) {
       }
 
       // check if valid coordinate
-      const isValidCoordinate = false;
+      let isValidCoordinate = true;
+      let row;
+      let col;
+
+      if (coordinate.length == 2) {
+        const alphaVal = (s) => s.toLowerCase().charCodeAt(0) - 97 + 1;
+        row = alphaVal(coordinate[0]);
+        col = Number(coordinate[1]);
+        
+        if (!row || !col || row < 1 || row > 9 || col < 1 || col > 9) {
+          isValidCoordinate = false;
+        }
+      } else {
+        isValidCoordinate = false;
+      }
       if (!isValidCoordinate) {
         return res.json({error: 'Invalid coordinate'});
       }
 
-      // check if valid puzzle
       const result = solver.validate(puzzle);
-      if (result != true && !Array.isArray(result)) {
-        return res.json({error: result});
+      if (result != true) {
+        if (result != false) {
+          return res.json({error: result});
+        }
+        return res.json({error: 'Invalid puzzle'});
       }
-      res.json({
-        valid: result == true ? true : false,
-        conflict: result.isArray() ? result : [],
 
+      // check if valid position
+      let errorMessage = [];
+      if (!solver.checkRowPlacement(puzzle, row, col, value)) {
+        errorMessage.push('row');
+      }
+      if (!solver.checkColPlacement(puzzle, row, col, value)) {
+        errorMessage.push('column');
+      }
+      if (!solver.checkRegionPlacement(puzzle, row, col, value)) {
+        errorMessage.push('region');
+      }
+      if (errorMessage.length != 0) {
+        return res.json({
+          valid: false,
+          conflict: errorMessage
+        });
+      }
+
+      return res.json({
+        valid: true
       });
     });
     
@@ -46,7 +79,7 @@ module.exports = function (app) {
 
       const result = solver.solve(sudoku);
       if (result.length != 81) {
-        if (!Array.isArray(result)) {
+        if (result != false) {
           return res.json({error: result});
         }
         return res.json({error: 'Puzzle cannot be solved'});

@@ -91,44 +91,171 @@ suite('Functional Tests', () => {
             chai
             .request(server)
             .keepOpen()
-            .post('/api/solve')
+            .post('/api/check')
             .send({
                 puzzle: puzzle.puzzlesAndSolutions[0][0],
                 coordinate: 'A2',
                 value: 3
-                
             })
             .end(function(err, res){
                 assert.equal(res.status, 200);
                 assert.isObject(res.body);
-                assert.hasAllKeys(res.body, ['solution']);
-                assert.equal(res.body.solution, puzzle.puzzlesAndSolutions[0][1]);
+                assert.hasAllKeys(res.body, ['valid']);
+                assert.equal(res.body.valid, true);
                 done();
             });
         });
         test('a puzzle placement with single placement conflict: POST request to /api/check', function(done){
-            //done
+            chai
+            .request(server)
+            .keepOpen()
+            .post('/api/check')
+            .send({
+                puzzle: puzzle.puzzlesAndSolutions[4][0],
+                coordinate: 'B5',
+                value: 9
+            })
+            .end(function(err, res){
+                assert.equal(res.status, 200);
+                assert.isObject(res.body);
+                assert.hasAllKeys(res.body, ['valid', 'conflict']);
+                assert.equal(res.body.valid, false);
+                assert.equal(res.body.conflict.length, 1);
+                assert.equal(res.body.conflict[0], "row");
+                done();
+            });
         });
         test('a puzzle placement with multiple placement conflicts: POST request to /api/check', function(done){
-            //done
+            chai
+            .request(server)
+            .keepOpen()
+            .post('/api/check')
+            .send({
+                puzzle: puzzle.puzzlesAndSolutions[4][0],
+                coordinate: 'H8',
+                value: 1
+            })
+            .end(function(err, res){
+                assert.equal(res.status, 200);
+                assert.isObject(res.body);
+                assert.hasAllKeys(res.body, ['valid', 'conflict']);
+                assert.equal(res.body.valid, false);
+                assert.equal(res.body.conflict.length, 2);
+                assert.equal(res.body.conflict[0], "row");
+                assert.equal(res.body.conflict[1], "region");
+                done();
+            });
         });
         test('a puzzle placement with all placement conflicts: POST request to /api/check', function(done){
-            //done
+            chai
+            .request(server)
+            .keepOpen()
+            .post('/api/check')
+            .send({
+                puzzle: puzzle.puzzlesAndSolutions[4][0],
+                coordinate: 'A4',
+                value: 8
+            })
+            .end(function(err, res){
+                assert.equal(res.status, 200);
+                assert.isObject(res.body);
+                assert.hasAllKeys(res.body, ['valid', 'conflict']);
+                assert.equal(res.body.valid, false);
+                assert.equal(res.body.conflict.length, 3);
+                assert.equal(res.body.conflict[0], "row");
+                assert.equal(res.body.conflict[1], "column");
+                assert.equal(res.body.conflict[2], "region");
+                done();
+            });
         });
         test('a puzzle placement with missing required fields: POST request to /api/check', function(done){
-            //done
+            chai
+            .request(server)
+            .keepOpen()
+            .post('/api/check')
+            .send({
+                puzzle: puzzle.puzzlesAndSolutions[4][0],
+                value: 8
+            })
+            .end(function(err, res){
+                assert.equal(res.status, 200);
+                assert.isObject(res.body);
+                assert.hasAllKeys(res.body, ['error']);
+                assert.equal(res.body.error, 'Required field(s) missing');
+                done();
+            });
         });
         test('a puzzle placement with invalid characters: POST request to /api/check', function(done){
-            //done
+            chai
+            .request(server)
+            .keepOpen()
+            .post('/api/check')
+            .send({
+                puzzle: puzzle.puzzlesAndSolutions[4][0],
+                coordinate: '_!',
+                value: 8
+            })
+            .end(function(err, res){
+                assert.equal(res.status, 200);
+                assert.isObject(res.body);
+                assert.hasAllKeys(res.body, ['error']);
+                assert.equal(res.body.error, 'Invalid coordinate');
+                done();
+            });
         });
         test('a puzzle placement with incorrect length: POST request to /api/check', function(done){
-            //done
+            chai
+            .request(server)
+            .keepOpen()
+            .post('/api/check')
+            .send({
+                puzzle: puzzle.puzzlesAndSolutions[4][0],
+                coordinate: 'J11',
+                value: 8
+            })
+            .end(function(err, res){
+                assert.equal(res.status, 200);
+                assert.isObject(res.body);
+                assert.hasAllKeys(res.body, ['error']);
+                assert.equal(res.body.error, 'Invalid coordinate');
+                done();
+            });
         });
         test('a puzzle placement with invalid placement coordinate: POST request to /api/check', function(done){
-            //done
+            chai
+            .request(server)
+            .keepOpen()
+            .post('/api/check')
+            .send({
+                puzzle: puzzle.puzzlesAndSolutions[4][0],
+                coordinate: 'A0',
+                value: 8
+            })
+            .end(function(err, res){
+                assert.equal(res.status, 200);
+                assert.isObject(res.body);
+                assert.hasAllKeys(res.body, ['error']);
+                assert.equal(res.body.error, 'Invalid coordinate');
+                done();
+            });
         });
         test('a puzzle placement with invalid placement value: POST request to /api/check', function(done){
-            //done
+            chai
+            .request(server)
+            .keepOpen()
+            .post('/api/check')
+            .send({
+                puzzle: puzzle.puzzlesAndSolutions[4][0],
+                coordinate: 'E8',
+                value: 10
+            })
+            .end(function(err, res){
+                assert.equal(res.status, 200);
+                assert.isObject(res.body);
+                assert.hasAllKeys(res.body, ['error']);
+                assert.equal(res.body.error, 'Invalid value');
+                done();
+            });
         });
     });
 });

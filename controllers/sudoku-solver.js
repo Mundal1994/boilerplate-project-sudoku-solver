@@ -17,14 +17,18 @@ class SudokuSolver {
         const col = (i % 9) + 1;
         const val = puzzleString[i];
         
+        let errorMessage = [];
         if (!this.checkRowPlacement(puzzleString, row, col, val)) {
-          return 'row';
+          errorMessage.push('row');
         }
         if (!this.checkColPlacement(puzzleString, row, col, val)) {
-          return 'column';
+          errorMessage.push('column');
         }
         if (!this.checkRegionPlacement(puzzleString, row, col, val)) {
-          return 'region';
+          errorMessage.push('region');
+        }
+        if (errorMessage.length != 0) {
+          return errorMessage;
         }
       }
     }

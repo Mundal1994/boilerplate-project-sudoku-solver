@@ -26,14 +26,13 @@ module.exports = function (app) {
       }
 
       // check if valid puzzle
-      const skipErrorMessage = 'columnrowregion';
       const result = solver.validate(puzzle);
-      if (result != true && !skipErrorMessage.includes(skipErrorMessage)) {
+      if (result != true && !Array.isArray(result)) {
         return res.json({error: result});
       }
       res.json({
         valid: result == true ? true : false,
-        conflict: [/*row, column and/or region*/],
+        conflict: result.isArray() ? result : [],
 
       });
     });
@@ -45,10 +44,9 @@ module.exports = function (app) {
         return res.json({error: 'Error: missing Sudoku string.'});
       }
 
-      const skipErrorMessage = 'columnrowregion';
       const result = solver.solve(sudoku);
       if (result.length != 81) {
-        if (!skipErrorMessage.includes(result)) {
+        if (!Array.isArray(result)) {
           return res.json({error: result});
         }
         return res.json({error: 'Puzzle cannot be solved'});

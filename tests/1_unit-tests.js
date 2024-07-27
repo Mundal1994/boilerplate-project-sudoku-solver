@@ -64,7 +64,11 @@ suite('Unit Tests', () => {
         assert.isFalse(solver.checkRegionPlacement(Puzzle.puzzlesAndSolutions[1][0], 1, 2, 3));
     });
     test('Valid puzzle strings pass the solver', function(){
-        //assert.equal(, );
+        const len = Puzzle.puzzlesAndSolutions.length;
+        
+        for (let i = 0; i < len; i++) {
+            assert.equal(solver.solve(Puzzle.puzzlesAndSolutions[i][0]), Puzzle.puzzlesAndSolutions[i][1]);
+        }
     });
     test('Invalid puzzle strings fail the solver', function(){
         //assert.equal(, );

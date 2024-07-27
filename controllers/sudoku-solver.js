@@ -38,7 +38,6 @@ class SudokuSolver {
     if (valPos < len && valPos >= 0) {
       while (start < end) {
         if (start != valPos && puzzleString[start] == value) {
-          console.log("Row Placement is false: Pos: ", start, " with value: ", value, " already exist");
           return false;
         }
         ++start;
@@ -57,7 +56,6 @@ class SudokuSolver {
     if (valPos < len && valPos >= 0) {
       while (start < end) {
         if (start != valPos && puzzleString[start] == value) {
-          console.log("Column placement is false: Pos: ", start, " with value: ", value, " already exist");
           return false;
         }
         start += 9;
@@ -92,7 +90,6 @@ class SudokuSolver {
       while (start < end) {
         for (let i = 0; i < 3; i++) {
           if (start + i != valPos && puzzleString[start + i] == value) {
-            console.log("Region placement is false: Pos: ", start + i, " with value: ", value, " already exist");
             return false;
           }
         }
@@ -104,7 +101,41 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
-    
+    const len = puzzleString.length;
+
+    let solved = true;
+    for (let i = 0; i < len; i++) {
+      if (puzzleString[i] == '.') {
+        solved = false;
+        break;
+      }
+    }
+    if (solved) {
+      return puzzleString;
+    }
+
+    for (let i = 0; i < len; i++) {
+      if (puzzleString[i] == '.') {
+        for (let val = 1; val < 10; val++) {
+          const row = Math.floor((i / 9) + 1);
+          const col = (i % 9) + 1;
+          
+          if (this.checkRowPlacement(puzzleString, row, col, val) && 
+              this.checkColPlacement(puzzleString, row, col, val) && 
+              this.checkRegionPlacement(puzzleString, row, col, val)) {
+  
+            const newPuzzleString = puzzleString.substring(0, i) + val + puzzleString.substring(i + 1);
+            const result = this.solve(newPuzzleString);
+            
+            if (result) {
+              return result;
+            }
+          }
+        }
+        return false;
+      }
+    }
+    return false;
   }
 }
 
